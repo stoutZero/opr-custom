@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-# Stage 1: Build environment using debian:bookworm-fat
-FROM openresty/openresty:bookworm-fat AS builder
+ARG OPR_V=1.31.1.1
+ARG NGX_V=1.31.1
 
-ARG OPR_V
-ARG NGX_V
+# Stage 1: Build environment using debian:bookworm-fat
+FROM ghcr.io/neomantra/openresty:${OPR_V}-bookworm-fat AS builder
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
@@ -146,8 +146,15 @@ RUN mkdir -p /tmp/so-modules \
   && find /tmp/openresty-${OPR_V}/build/nginx-${NGX_V} -type f -name '*.so' -exec cp {} /tmp/so-modules/ \;  ;\
   rm -rf /var/lib/apt/lists/* /var/cache/debconf/*-old /var/cache/debconf/templates.dat
 
+ARG OPR_V=1.31.1.1
+ARG NGX_V=1.31.1
+ARG NGX_UI_V=2.5.10
+ARG TZ="Etc/UTC"
+ARG S6_V=3.2.3.2
+
+
 # Stage 2: Runtime Environment
-FROM ghcr.io/neomantra/openresty:bookworm-amd64 AS runtime
+FROM ghcr.io/neomantra/openresty:${OPR_V}-bookworm-amd64 AS runtime
 
 LABEL org.opencontainers.image.authors="Aprilus Lumbantoruan <i@pilus.me>" \
   org.opencontainers.image.title="openresty-crowdsec-bouncer-nginx-ui" \
@@ -157,10 +164,6 @@ LABEL org.opencontainers.image.authors="Aprilus Lumbantoruan <i@pilus.me>" \
   org.opencontainers.image.vendor="stoutZero" \
   org.opencontainers.image.documentation="To enable Crowdsec Bouncer, supply 3 env vars: CS_API_URL, CS_API_KEY, CS_APPSEC_URL." \
   maintainer="Aprilus Lumbantoruan <i@pilus.me>"
-
-ARG TZ="Etc/UTC"
-ARG NGX_UI_V
-ARG S6_V
 
 ENV TZ=${TZ} \
   DEBIAN_FRONTEND="noninteractive"
