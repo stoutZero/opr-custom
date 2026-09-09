@@ -10,69 +10,14 @@ The image is built with a multi‑stage Dockerfile:
 1. **builder** – compiles a set of third‑party Nginx modules as dynamic `.so` files.
 2. **prod** – pulls the compiled modules into a clean OpenResty runtime, installs the CrowdSec bouncer and Nginx‑UI, and configures s6‑overlay.
 
----
-
 ## Software Versions:
+- Operating System(s): Debian Bookworm (12) only.
 - NginX: 1.31.1
 - OpenResty: 1.31.1.1
 - Nginx-UI: 2.5.10
 - S6-Overlay: 3.2.3.2
 
 Those versions above are generated from `./versions.sh -w` command.
-
----
-
-## OpenResty Original Configure arguments
-<details>
-  <summary>Click to view</summary>
-
-  ```bash
---prefix=/usr/local/openresty/nginx \
---with-cc-opt='-O2 -DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/zlib/include -I/usr/local/openresty/pcre2/include -I/usr/local/openresty/openssl3/include' \
---add-module=../ngx_devel_kit-0.3.4 \
---add-module=../echo-nginx-module-0.64 \
---add-module=../xss-nginx-module-0.07 \
---add-module=../ngx_coolkit-0.2 \
---add-module=../set-misc-nginx-module-0.33 \
---add-module=../form-input-nginx-module-0.12 \
---add-module=../encrypted-session-nginx-module-0.09 \
---add-module=../srcache-nginx-module-0.33 \
---add-module=../ngx_lua-0.10.31rc5 \
---add-module=../ngx_lua_upstream-0.08 \
---add-module=../headers-more-nginx-module-0.39 \
---add-module=../array-var-nginx-module-0.06 \
---add-module=../memc-nginx-module-0.20 \
---add-module=../redis2-nginx-module-0.15 \
---add-module=../redis-nginx-module-0.41 \
---add-module=../ngx_stream_lua-0.0.19rc4 \
---with-ld-opt='-Wl,-rpath,/usr/local/openresty/luajit/lib -L/usr/local/openresty/zlib/lib -L/usr/local/openresty/pcre2/lib -L/usr/local/openresty/openssl3/lib -Wl,-rpath,/usr/local/openresty/zlib/lib:/usr/local/openresty/pcre2/lib:/usr/local/openresty/openssl3/lib' \
---with-pcre-jit \
---with-stream \
---with-stream_ssl_module \
---with-stream_ssl_preread_module \
---with-http_v2_module \
---with-http_v3_module \
---without-mail_pop3_module \
---without-mail_imap_module \
---without-mail_smtp_module \
---with-http_stub_status_module \
---with-http_realip_module \
---with-http_addition_module \
---with-http_auth_request_module \
---with-http_secure_link_module \
---with-http_random_index_module \
---with-http_gzip_static_module \
---with-http_sub_module \
---with-http_dav_module \
---with-http_flv_module \
---with-http_mp4_module \
---with-http_slice_module \
---with-http_gunzip_module \
---with-threads \
---with-compat \
---with-http_ssl_module
-```
-</details>
 
 ## OpenResty's Pre-included Nginx Modules
 
