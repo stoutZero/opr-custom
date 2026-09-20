@@ -3,7 +3,8 @@
 source versions.sh
 
 docker build \
-    --build-arg TZ=UTC \
+    --build-arg TZ="Etc/UTC" \
+    --build-arg IMG_V="$IMG_V" \
     --build-arg OPR_V="$OPR_V" \
     --build-arg NGX_V="$NGX_V" \
     --build-arg NGX_UI_V="$NGX_UI_V" \

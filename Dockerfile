@@ -1,12 +1,17 @@
 # syntax=docker/dockerfile:1
 
+ARG IMG_V=1.31.1.1-1
 ARG OPR_V=1.31.1.1
 ARG NGX_V=1.31.1
 
 # Stage 1: Build environment using debian:bookworm-fat
-FROM ghcr.io/neomantra/openresty:${OPR_V}-bookworm-fat AS builder
+FROM ghcr.io/neomantra/openresty:${IMG_V}-bookworm-fat AS builder
 
-ENV DEBIAN_FRONTEND="noninteractive"
+ARG OPR_V
+ARG NGX_V
+
+ENV OPR_V="${OPR_V}" \
+  DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -121,7 +126,6 @@ RUN echo "Running ./configure ... " \
   && ./configure \
   --with-compat \
   --with-http_ssl_module \
-  ## --with-stream \ ## this is already included in openresty
   --add-dynamic-module=/tmp/modules/nginx-http-auth-totp-1.2.0 \
   --add-dynamic-module=/tmp/modules/autocert-1.3.0 \
   --add-dynamic-module=/tmp/modules/brotli-a71f931 \
@@ -146,26 +150,26 @@ RUN mkdir -p /tmp/so-modules \
   && find /tmp/openresty-${OPR_V}/build/nginx-${NGX_V} -type f -name '*.so' -exec cp {} /tmp/so-modules/ \;  ;\
   rm -rf /var/lib/apt/lists/* /var/cache/debconf/*-old /var/cache/debconf/templates.dat
 
-ARG OPR_V=1.31.1.1
-ARG NGX_V=1.31.1
-ARG NGX_UI_V=2.5.10
-ARG TZ="Etc/UTC"
-ARG S6_V=3.2.3.2
-
+ARG IMG_V=1.31.1.1-1
 
 # Stage 2: Runtime Environment
-FROM ghcr.io/neomantra/openresty:${OPR_V}-bookworm-amd64 AS runtime
+FROM ghcr.io/neomantra/openresty:${IMG_V}-bookworm AS runtime
+
+ARG IMG_V=1.31.1.1-1
+ARG TZ="Etc/UTC"
+ARG S6_V
+ARG NGX_UI_V
 
 LABEL org.opencontainers.image.authors="Aprilus Lumbantoruan <i@pilus.me>" \
   org.opencontainers.image.title="openresty-crowdsec-bouncer-nginx-ui" \
   org.opencontainers.image.description="My Custom OpenResty w/ Crowdsec Bouncer & Nginx-UI" \
   org.opencontainers.image.licenses="BSD-2-Clause" \
-  org.opencontainers.image.version="latest" \
+  org.opencontainers.image.version="${IMG_V}" \
   org.opencontainers.image.vendor="stoutZero" \
   org.opencontainers.image.documentation="To enable Crowdsec Bouncer, supply 3 env vars: CS_API_URL, CS_API_KEY, CS_APPSEC_URL." \
   maintainer="Aprilus Lumbantoruan <i@pilus.me>"
 
-ENV TZ=${TZ} \
+ENV TZ="${TZ:-'Etc/UTC'}" \
   DEBIAN_FRONTEND="noninteractive"
 
 # s6: keep the container env for service run scripts; don't time out waiting for

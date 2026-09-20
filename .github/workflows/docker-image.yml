@@ -54,6 +54,7 @@ jobs:
           set +e
           source ./versions.sh
           set -e
+          echo "IMG_V=$IMG_V" >> $GITHUB_ENV
           echo "OPR_V=$OPR_V" >> $GITHUB_ENV
           echo "NGX_V=$NGX_V" >> $GITHUB_ENV
           echo "NGX_UI_V=$NGX_UI_V" >> $GITHUB_ENV
