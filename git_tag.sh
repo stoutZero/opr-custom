@@ -14,15 +14,8 @@ if [ "$current_branch" != "main" ]; then
     git checkout main
 fi
 
-## 3. Pull the latest "Docker Image" version from README.md following the pattern: "Docker Image: VERSION"
-version_line=$(grep -E "Docker Image:" README.md || true)
-if [ -z "$version_line" ]; then
-    echo "Error: Could not find 'Docker Image:' in README.md."
-    exit 1
-fi
-
 ## Extract the VERSION and remove spaces/carriage returns
-version=$(echo "$version_line" | sed -E 's/.*Docker Image:[[:space:]]*//' | tr -d '[:space:]')
+version="$(date -u +'%y.%m.%d')"
 if [ -z "$version" ]; then
     echo "Error: Extracted version is empty."
     exit 1

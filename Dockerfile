@@ -1,16 +1,16 @@
 # syntax=docker/dockerfile:1
 
-ARG IMG_V=1.31.1.1-1
-ARG OPR_V=1.31.1.1
+ARG UPSTREAM_IMG_V=1.31.1.1-3
+ARG RESTY_SRC_V=1.31.1.1
 ARG NGX_V=1.31.1
 
 # Stage 1: Build environment using debian:bookworm-fat
-FROM ghcr.io/neomantra/openresty:${IMG_V}-bookworm-fat AS builder
+FROM ghcr.io/neomantra/openresty:${UPSTREAM_IMG_V}-bookworm-fat AS builder
 
-ARG OPR_V
+ARG RESTY_SRC_V
 ARG NGX_V
 
-ENV OPR_V="${OPR_V}" \
+ENV RESTY_SRC_V="${RESTY_SRC_V}" \
   DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update \
@@ -119,10 +119,10 @@ RUN apt-get install -y --no-install-recommends \
 # Download OpenResty source matching the runtime version to compile module .so objects
 RUN echo "Running ./configure ... " \
   && cd /tmp \
-  && curl -fSL https://openresty.org/download/openresty-${OPR_V}.tar.gz -o openresty.tar.gz \
+  && curl -fSL https://openresty.org/download/openresty-${RESTY_SRC_V}.tar.gz -o openresty.tar.gz \
   && tar -zxf openresty.tar.gz \
   && rm -f /tmp/openresty.tar.gz \
-  && cd /tmp/openresty-${OPR_V} \
+  && cd /tmp/openresty-${RESTY_SRC_V} \
   && ./configure \
   --with-compat \
   --with-http_ssl_module \
@@ -143,31 +143,36 @@ RUN echo "Running ./configure ... " \
   --add-dynamic-module=/tmp/modules/zstd-427608e
 
 RUN echo "Running make modules ... " \
-  && cd $(ls -d /tmp/openresty-${OPR_V}/build/nginx-${NGX_V} | head -n 1) \
+  && cd $(ls -d /tmp/openresty-${RESTY_SRC_V}/build/nginx-${NGX_V} | head -n 1) \
   && make -j$(nproc) modules
 
 RUN mkdir -p /tmp/so-modules \
-  && find /tmp/openresty-${OPR_V}/build/nginx-${NGX_V} -type f -name '*.so' -exec cp {} /tmp/so-modules/ \;  ;\
+  && find /tmp/openresty-${RESTY_SRC_V}/build/nginx-${NGX_V} -type f -name '*.so' -exec cp {} /tmp/so-modules/ \;  ;\
   rm -rf /var/lib/apt/lists/* /var/cache/debconf/*-old /var/cache/debconf/templates.dat
 
-ARG IMG_V=1.31.1.1-1
+ARG UPSTREAM_IMG_V=1.31.1.1-3
 
 # Stage 2: Runtime Environment
-FROM ghcr.io/neomantra/openresty:${IMG_V}-bookworm AS runtime
+FROM ghcr.io/neomantra/openresty:${UPSTREAM_IMG_V}-bookworm AS runtime
 
-ARG IMG_V=1.31.1.1-1
+ARG UPSTREAM_IMG_V=1.31.1.1-3
 ARG TZ="Etc/UTC"
 ARG S6_V
 ARG NGX_UI_V
+ARG VERSION
 
 LABEL org.opencontainers.image.authors="Aprilus Lumbantoruan <i@pilus.me>" \
   org.opencontainers.image.title="openresty-crowdsec-bouncer-nginx-ui" \
   org.opencontainers.image.description="My Custom OpenResty w/ Crowdsec Bouncer & Nginx-UI" \
   org.opencontainers.image.licenses="BSD-2-Clause" \
-  org.opencontainers.image.version="${IMG_V}" \
+  org.opencontainers.image.version="${VERSION}" \
   org.opencontainers.image.vendor="stoutZero" \
+  org.opencontainers.image.source="https://github.com/stoutzero/opr-custom" \
   org.opencontainers.image.documentation="To enable Crowdsec Bouncer, supply 3 env vars: CS_API_URL, CS_API_KEY, CS_APPSEC_URL." \
-  maintainer="Aprilus Lumbantoruan <i@pilus.me>"
+  maintainer="Aprilus Lumbantoruan <i@pilus.me>" \
+  resty_deb_version="$UPSTREAM_IMG_V" \
+  nginx_ui_version="$NGX_UI_V" \
+  s6_version="$S6_V"
 
 ENV TZ="${TZ:-'Etc/UTC'}" \
   DEBIAN_FRONTEND="noninteractive"
@@ -181,7 +186,7 @@ ENV S6_KEEP_ENV=1 \
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends libmaxminddb0 libbrotli1 libzstd1 curl gettext-base xz-utils
-RUN curl -s https://install.crowdsec.net | sh || { echo "Curl not found" ; exit 1 ; } 
+RUN curl -s https://install.crowdsec.net | sh || { echo "Curl not found" ; exit 1 ; }
 RUN apt-get update && apt-get install -y --no-install-recommends crowdsec-openresty-bouncer
 
 # Copy compiled dynamic modules into OpenResty's module directory

@@ -12,10 +12,10 @@ The image is built with a multi‑stage Dockerfile:
 
 ## Software Versions:
 - Operating System(s): Debian Bookworm (12) only.
-- Docker Image: 1.31.1.1-3
-- OpenResty: 1.31.1.1
+- Upstream Image: 1.31.1.1-3
+- OpenResty src: 1.31.1.1
 - NginX: 1.31.1
-- Nginx-UI: 2.5.10
+- Nginx-UI: 2.6.3
 - S6-Overlay: 3.2.3.2
 
 Those versions above are generated from `./versions.sh -w` command.
