@@ -54,11 +54,12 @@ jobs:
           set +e
           source ./versions.sh
           set -e
-          echo "IMG_V=$IMG_V" >> $GITHUB_ENV
-          echo "OPR_V=$OPR_V" >> $GITHUB_ENV
+          echo "UPSTREAM_IMG_V=$UPSTREAM_IMG_V" >> $GITHUB_ENV
+          echo "RESTY_SRC_V=$RESTY_SRC_V" >> $GITHUB_ENV
           echo "NGX_V=$NGX_V" >> $GITHUB_ENV
           echo "NGX_UI_V=$NGX_UI_V" >> $GITHUB_ENV
           echo "S6_V=$S6_V" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Build Docker image with custom script
         run: |

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-#!/usr/bin/env bash
 set -euo pipefail
 
 export UPSTREAM_IMG_V
