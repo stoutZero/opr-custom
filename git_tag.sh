@@ -14,6 +14,15 @@ if [ "$current_branch" != "main" ]; then
     git checkout main
 fi
 
+## 3. Check if the latest commit already has a tag associated with it
+if [ -n "$(git tag --points-at HEAD)" ]; then
+    echo "Error: The latest commit on 'main' already has a tag associated with it. Aborting."
+    exit 1
+fi
+
+echo "Merging dev branch into main..."
+git merge dev
+
 ## Extract the VERSION and remove spaces/carriage returns
 version="$(date -u +'%y.%m.%d')"
 if [ -z "$version" ]; then
