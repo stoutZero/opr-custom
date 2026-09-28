@@ -44,6 +44,8 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
             type=sha
+            type=schedule,pattern={{date 'YY.MM'}}
+            type=schedule,pattern={{date 'YY'}}
             type=raw,value=latest
 
       - name: Load version vars
