@@ -47,7 +47,9 @@ jobs:
             type=ref,event=tag
             type=sha
             type=raw,value=${{ steps.date.outputs.v_ym }}
+            type=raw,value=v${{ steps.date.outputs.v_ym }}
             type=raw,value=${{ steps.date.outputs.v_y }}
+            type=raw,value=v${{ steps.date.outputs.v_y }}
             type=raw,value=latest
 
       - name: Load version vars
