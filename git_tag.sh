@@ -14,6 +14,8 @@ if [ "$current_branch" != "main" ]; then
     git checkout main
 fi
 
+git merge dev
+
 ## 3. Check if the latest commit already has a tag associated with it
 if [ -n "$(git tag --points-at HEAD)" ]; then
     echo "Error: The latest commit on 'main' already has a tag associated with it. Aborting."
