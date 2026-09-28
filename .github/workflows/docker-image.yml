@@ -33,7 +33,9 @@ jobs:
 
       - name: Set build date
         id: date
-        run: echo "date=$(date -u +'%Y.%m.%d')" >> $GITHUB_OUTPUT
+        run: |
+          echo "v_ym=$(date -u +'%y.%m')" >> $GITHUB_OUTPUT
+          echo "v_y=$(date -u +'%y')" >> $GITHUB_OUTPUT
 
       - name: Extract metadata (tags, labels)
         id: meta
@@ -44,8 +46,8 @@ jobs:
             type=ref,event=branch
             type=ref,event=tag
             type=sha
-            type=schedule,pattern={{date 'YY.MM'}}
-            type=schedule,pattern={{date 'YY'}}
+            type=raw,value=${{ steps.date.outputs.v_ym }}
+            type=raw,value=${{ steps.date.outputs.v_y }}
             type=raw,value=latest
 
       - name: Load version vars
