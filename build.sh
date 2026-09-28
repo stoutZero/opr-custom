@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-source versions.sh
+if [ -z "$UPSTREAM_IMG_V" ]; then
+    source versions.sh
+fi
 
 docker build \
     --build-arg TZ="Etc/UTC" \

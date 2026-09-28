@@ -3,12 +3,15 @@
 set -euo pipefail
 
 export UPSTREAM_IMG_V
+
+## This should be X.YY.Z.OPR-REV, .e.g.: 1.31.1.1-3
 UPSTREAM_IMG_V="$(python3 ./opr_v.py)"
 
-# Pull and extract the OpenResty version string using -V (outputs to stderr)
+## This is X.YY.Z.OPR, .e.g.: 1.31.1.1
 export RESTY_SRC_V="${UPSTREAM_IMG_V%-*}"
+## This is X.YY.Z, .e.g.: 1.31.1
 export NGX_V="${RESTY_SRC_V%.*}"
-export NGX_UI_V="2.6.3"
+export NGX_UI_V="2.7.0"
 export S6_V="3.2.3.2"
 
 export VERSION

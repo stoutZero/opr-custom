@@ -4,7 +4,7 @@ import json
 import re
 import sys
 
-def get_latest_tag(image="neomantra/openresty", pattern=r"^(1\.31\.1\.1-\d+)-bookworm-fat"):
+def get_latest_tag(image="neomantra/openresty", pattern=r"^(\d\.\d+\.\d+\.\d+-\d+)-bookworm-fat"):
     try:
         # 1. Get GHCR pull token
         token_url = f"https://ghcr.io/token?service=ghcr.io&scope=repository:{image}:pull"
@@ -20,7 +20,7 @@ def get_latest_tag(image="neomantra/openresty", pattern=r"^(1\.31\.1\.1-\d+)-boo
             with urllib.request.urlopen(req) as resp:
                 data = json.loads(resp.read().decode())
                 tags.extend(data.get("tags", []))
-                
+
                 link = resp.headers.get("Link", "")
                 m = re.search(r"\<([^>]+)\>;\s*rel=\"next\"", link)
                 if m:
