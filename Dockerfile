@@ -41,71 +41,99 @@ RUN curl -fsSLO https://github.com/61131/nginx-http-auth-totp/releases/download/
   && tar -xzf nginx-http-auth-totp-1.2.0.tar.gz \
   && rm -f nginx-http-auth-totp-1.2.0.tar.gz
 
-RUN git clone https://github.com/google/ngx_brotli.git brotli-a71f931 \
-  && cd brotli-a71f931 \
+RUN mkdir brotli-a71f9312 \
+&& cd brotli-a71f9312 \
+  && git init \
+  && git remote add origin https://github.com/google/ngx_brotli.git \
+  && git fetch origin a71f9312c2deb28875acc7bacfdd5695a111aa53 \
+  && git checkout FETCH_HEAD \
   && git submodule update --init \
   && cd ..
 
-RUN curl -fsSL https://github.com/nginx-modules/ngx_cache_purge/archive/refs/heads/master.zip -o ngx_cache_purge-master.zip \
-  && unzip -q ngx_cache_purge-master.zip \
-  && mv ngx_cache_purge-master cache-purge-285354e \
-  && rm -f ngx_cache_purge-master.zip
+RUN curl -fsSL https://github.com/nginx-modules/ngx_cache_purge/archive/refs/tags/3.0.4.zip -o ngx_cache_purge-3.0.4.zip \
+&& unzip -q ngx_cache_purge-3.0.4.zip \
+&& mv ngx_cache_purge-3.0.4 cache-purge-3.0.4 \
+&& rm -f ngx_cache_purge-3.0.4.zip
 
-RUN curl -fsSL https://github.com/HanadaLee/ngx_http_cache_dechunk_filter_module/archive/refs/heads/master.zip -o ngx_http_cache_dechunk_filter_module-master.zip \
-  && unzip -q ngx_http_cache_dechunk_filter_module-master.zip \
-  && mv ngx_http_cache_dechunk_filter_module-master cache_dechunk_filter-18a01ca \
-  && rm -f ngx_http_cache_dechunk_filter_module-master.zip
+RUN curl -fsSL https://github.com/HanadaLee/ngx_http_cache_dechunk_filter_module/archive/refs/tags/1.0.1.zip -o ngx_http_cache_dechunk_filter_module-1.0.1.zip \
+  && unzip -q ngx_http_cache_dechunk_filter_module-1.0.1.zip \
+  && mv ngx_http_cache_dechunk_filter_module-1.0.1 cache_dechunk_filter-1.0.1 \
+  && rm -f ngx_http_cache_dechunk_filter_module-1.0.1.zip
 
-RUN curl -fsSL https://github.com/HanadaLee/ngx_http_cors_module/archive/refs/heads/master.zip -o ngx_http_cors_module-master.zip \
-  && unzip -q ngx_http_cors_module-master.zip \
-  && mv ngx_http_cors_module-master cors-6646fa9 \
-  && rm -f ngx_http_cors_module-master.zip
+RUN curl -fsSL https://github.com/HanadaLee/ngx_http_cors_module/archive/refs/tags/0.1.1.zip -o ngx_http_cors_module-0.1.1.zip \
+  && unzip -q ngx_http_cors_module-0.1.1.zip \
+  && mv ngx_http_cors_module-0.1.1 cors-0.1.1 \
+  && rm -f ngx_http_cors_module-0.1.1.zip
 
-RUN curl -fsSL https://github.com/myguard-labs/nginx-error-abuse-module/archive/refs/heads/main.zip -o nginx-error-abuse-module-main.zip \
-  && unzip -q nginx-error-abuse-module-main.zip \
-  && mv nginx-error-abuse-module-main error_abuse-46db317 \
-  && rm -f nginx-error-abuse-module-main.zip
+RUN mkdir error_abuse-46db3176 \
+  && cd error_abuse-46db3176 \
+  && git init \
+  && git remote add origin https://github.com/myguard-labs/nginx-error-abuse-module.git \
+  && git fetch origin 46db31769397ef9781506b277d914f630578c241 \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
-RUN curl -fsSL https://github.com/nginx-modules/ngx_extravars/archive/refs/heads/master.zip -o ngx_extravars-master.zip \
-  && unzip -q ngx_extravars-master.zip \
-  && mv ngx_extravars-master extravars-6736559 \
-  && rm -f ngx_extravars-master.zip
+RUN mkdir extravars-67365591 \
+  && cd extravars-67365591 \
+  && git init \
+  && git remote add origin https://github.com/nginx-modules/ngx_extravars.git \
+  && git fetch origin 67365591d7073ea0a630883eb97752b9478cfe7a \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
 RUN curl -fsSLO https://github.com/aperezdc/ngx-fancyindex/releases/download/v0.6.0/ngx-fancyindex-0.6.0.tar.xz \
   && tar -xJf ngx-fancyindex-0.6.0.tar.xz \
   && rm -f ngx-fancyindex-0.6.0.tar.xz
 
-RUN curl -fsSL https://github.com/leev/ngx_http_geoip2_module/archive/refs/heads/master.zip -o ngx_http_geoip2_module-master.zip \
-  && unzip -q ngx_http_geoip2_module-master.zip \
-  && mv ngx_http_geoip2_module-master geoip2-445df24 \
-  && rm -f ngx_http_geoip2_module-master.zip
+RUN mkdir geoip2-a607a41a \
+  && cd geoip2-a607a41a \
+  && git init \
+  && git remote add origin https://github.com/leev/ngx_http_geoip2_module.git \
+  && git fetch origin a607a41a8115fecfc05b5c283c81532a3d605425 \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
-RUN curl -fsSL https://github.com/vozlt/nginx-module-stream-sts/archive/refs/heads/master.zip -o nginx-module-stream-sts-master.zip \
-  && unzip -q nginx-module-stream-sts-master.zip \
-  && mv nginx-module-stream-sts-master stream-sts-a60cd2f \
-  && rm -f nginx-module-stream-sts-master.zip
+RUN mkdir stream-sts-a60cd2fc \
+  && cd stream-sts-a60cd2fc \
+  && git init \
+  && git remote add origin https://github.com/vozlt/nginx-module-stream-sts.git \
+  && git fetch origin a60cd2fc2bdd689b8b4e12abcf71f7cf5018424a \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
-RUN curl -fsSL https://github.com/vozlt/nginx-module-sts/archive/refs/heads/master.zip -o nginx-module-sts-master.zip \
-  && unzip -q nginx-module-sts-master.zip \
-  && mv nginx-module-sts-master sts-3c10d42 \
-  && rm -f nginx-module-sts-master.zip
+RUN mkdir sts-3c10d42f \
+  && cd sts-3c10d42f \
+  && git init \
+  && git remote add origin https://github.com/vozlt/nginx-module-sts.git \
+  && git fetch origin 3c10d42f8c3f78b6310906eab5c8e066ee753330 \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
-RUN curl -fsSL https://github.com/vozlt/nginx-module-sysguard/archive/refs/heads/master.zip -o nginx-module-sysguard-master.zip \
-  && unzip -q nginx-module-sysguard-master.zip \
-  && mv nginx-module-sysguard-master sysguard-864c491 \
-  && rm -f nginx-module-sysguard-master.zip 2>/dev/null \
-  && sed -i 's/#if (NGX_HAVE_SYSINFO)/#if 1/g' /tmp/modules/sysguard-864c491/src/ngx_http_sysguard_sysinfo.h \
-  && sed -i 's/#if (NGX_HAVE_VM_STATS)/#if 0/g' /tmp/modules/sysguard-864c491/src/ngx_http_sysguard_sysinfo.h
+RUN mkdir sysguard-864c491c \
+  && cd sysguard-864c491c \
+  && git init \
+  && git remote add origin https://github.com/vozlt/nginx-module-sysguard.git \
+  && git fetch origin 864c491ccfec7a3a5549f0f3d962fca7dee7f620 \
+  && git checkout FETCH_HEAD \
+  && sed -i 's/#if (NGX_HAVE_SYSINFO)/#if 1/g' /tmp/modules/sysguard-864c491c/src/ngx_http_sysguard_sysinfo.h \
+  && sed -i 's/#if (NGX_HAVE_VM_STATS)/#if 0/g' /tmp/modules/sysguard-864c491c/src/ngx_http_sysguard_sysinfo.h \
+  && cd ..
 
-RUN curl -fsSL https://github.com/vozlt/nginx-module-vts/archive/refs/heads/master.zip -o nginx-module-vts-master.zip \
-  && unzip -q nginx-module-vts-master.zip \
-  && mv nginx-module-vts-master vts-014c759 \
-  && rm -f nginx-module-vts-master.zip
+RUN mkdir vts-fa36a468 \
+  && cd vts-fa36a468 \
+  && git init \
+  && git remote add origin https://github.com/vozlt/nginx-module-vts.git \
+  && git fetch origin fa36a4680d7e3fe2ec3c38d3961fd177d7a0d366 \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
-RUN curl -fsSL https://github.com/myguard-labs/nginx-zstd-module/archive/refs/heads/master.zip -o nginx-zstd-module-master.zip \
-  && unzip -q nginx-zstd-module-master.zip \
-  && mv nginx-zstd-module-master zstd-427608e \
-  && rm -f nginx-zstd-module-master.zip
+RUN mkdir zstd-d2443667 \
+&& cd zstd-d2443667 \
+  && git init \
+  && git remote add origin https://github.com/myguard-labs/nginx-zstd-module.git \
+  && git fetch origin d2443667159bf288f7e11e7a5ff1b6cff18afbf3 \
+  && git checkout FETCH_HEAD \
+  && cd ..
 
 RUN apt-get install -y --no-install-recommends \
   build-essential \
@@ -128,19 +156,19 @@ RUN echo "Running ./configure ... " \
   --with-http_ssl_module \
   --add-dynamic-module=/tmp/modules/nginx-http-auth-totp-1.2.0 \
   --add-dynamic-module=/tmp/modules/autocert-1.3.0 \
-  --add-dynamic-module=/tmp/modules/brotli-a71f931 \
-  --add-dynamic-module=/tmp/modules/cache-purge-285354e \
-  --add-dynamic-module=/tmp/modules/cache_dechunk_filter-18a01ca \
-  --add-dynamic-module=/tmp/modules/cors-6646fa9 \
-  --add-dynamic-module=/tmp/modules/error_abuse-46db317 \
-  --add-dynamic-module=/tmp/modules/extravars-6736559 \
+  --add-dynamic-module=/tmp/modules/brotli-a71f9312 \
+  --add-dynamic-module=/tmp/modules/cache-purge-3.0.4 \
+  --add-dynamic-module=/tmp/modules/cache_dechunk_filter-1.0.1 \
+  --add-dynamic-module=/tmp/modules/cors-0.1.1 \
+  --add-dynamic-module=/tmp/modules/error_abuse-46db3176 \
+  --add-dynamic-module=/tmp/modules/extravars-67365591 \
   --add-dynamic-module=/tmp/modules/ngx-fancyindex-0.6.0 \
-  --add-dynamic-module=/tmp/modules/geoip2-445df24 \
-  --add-dynamic-module=/tmp/modules/stream-sts-a60cd2f \
-  --add-dynamic-module=/tmp/modules/sts-3c10d42 \
-  --add-dynamic-module=/tmp/modules/sysguard-864c491 \
-  --add-dynamic-module=/tmp/modules/vts-014c759 \
-  --add-dynamic-module=/tmp/modules/zstd-427608e
+  --add-dynamic-module=/tmp/modules/geoip2-a607a41a \
+  --add-dynamic-module=/tmp/modules/stream-sts-a60cd2fc \
+  --add-dynamic-module=/tmp/modules/sts-3c10d42f \
+  --add-dynamic-module=/tmp/modules/sysguard-864c491c \
+  --add-dynamic-module=/tmp/modules/vts-fa36a468 \
+  --add-dynamic-module=/tmp/modules/zstd-d2443667
 
 RUN echo "Running make modules ... " \
   && cd $(ls -d /tmp/openresty-${RESTY_SRC_V}/build/nginx-${NGX_V} | head -n 1) \
