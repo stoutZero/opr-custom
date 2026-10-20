@@ -11,7 +11,7 @@ UPSTREAM_IMG_V="$(python3 ./opr_v.py)"
 export RESTY_SRC_V="${UPSTREAM_IMG_V%-*}"
 ## This is X.YY.Z, .e.g.: 1.31.1
 export NGX_V="${RESTY_SRC_V%.*}"
-export NGX_UI_V="2.7.0"
+export NGX_UI_V="2.9.0"
 export S6_V="3.2.3.2"
 
 export VERSION
